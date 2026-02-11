@@ -287,6 +287,39 @@
 
     async function sendMessage() {
 
+
+      // ----- small talk / human mode -----
+const smallTalk = /^(hi|hello|hey|hii|hlo|thanks|thank you)$/i;
+
+if (smallTalk.test(text)) {
+
+  msgs.innerHTML += `
+    <div class="jaya-bot">
+      Hi 👋 I’m Jaya.  
+      You can ask me about tools on this website or how things work.
+    </div>
+  `;
+
+  msgs.scrollTop = msgs.scrollHeight;
+  return;
+}
+
+
+// only number / size -> ask proper question
+if (/^\d+\s*(kb|mb)?$/i.test(text)) {
+
+  msgs.innerHTML += `
+    <div class="jaya-bot">
+      Please tell me what you want to do with ${text}.
+      For example: "compress image to ${text}"
+    </div>
+  `;
+
+  msgs.scrollTop = msgs.scrollHeight;
+  return;
+}
+
+
       const text = input.value.trim();
       if (!text) return;
 
