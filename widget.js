@@ -16,248 +16,265 @@
 
   const style = document.createElement("style");
   style.textContent = `
- .jaya-wrap{
-    position:fixed;
-    bottom:32px;
-    right:32px;
+.jaya-wrap{
+  position:fixed;
+  bottom:32px;
+  right:32px;
+  z-index:999999;
+  text-align:center;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+}
 
+/* bubble */
+.jaya-bubble{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:#020617;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  position:relative;
+  overflow:hidden;
+  user-select:none;
+  touch-action:manipulation;
+}
 
-  .jaya-bubble{
-    width:64px;height:64px;border-radius:50%;
-    background:#020617;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-    position:relative;
-    overflow:hidden;
-  }
+.jaya-bubble img{
+  width:44px;
+  height:44px;
+  pointer-events:none;
+}
 
-  .jaya-bubble img{width:65px;height:55px}
+/* label under bubble */
+.jaya-label{
+  font-size:11px;
+  margin-top:4px;
+  color:#0f172a;
+  font-weight:600;
+  pointer-events:none;   /* 🔥 VERY IMPORTANT */
+}
 
-  .jaya-label{
-    font-size:11px;
-    margin-top:4px;
-    color:#0f172a;
-    font-weight:600;
-  }
+/* ripple wave */
+.jaya-wave{
+  position:absolute;
+  border-radius:50%;
+  transform:scale(0);
+  background:rgba(34,197,94,.35);
+  animation:jaya-ripple .7s linear;
+  pointer-events:none;
+}
 
-  .jaya-wave{
-    position:absolute;
-    border-radius:50%;
-    transform:scale(0);
-    background:rgba(34,197,94,.35);
-    animation:jaya-ripple .7s linear;
-    pointer-events:none;
-  }
+@keyframes jaya-ripple{
+  to{transform:scale(3);opacity:0;}
+}
 
-  @keyframes jaya-ripple{
-    to{transform:scale(3);opacity:0;}
-  }
+/* chat box */
+.jaya-chat{
+  position:fixed;
+  bottom:140px;
+  right:32px;
+  width:360px;
+  height:500px;
+  background:#ffffff;
+  border-radius:18px;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:999999;
+}
+
+/* header */
+.jaya-header{
+  padding:14px 16px;
+  background:linear-gradient(135deg,#0f766e,#020617);
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+}
+
+.jaya-header small{
+  display:block;
+  font-size:11px;
+  opacity:.8;
+  font-weight:400;
+}
+
+/* messages */
+.jaya-messages{
+  flex:1;
+  padding:12px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-size:14px;
+}
+
+.jaya-user{
+  align-self:flex-end;
+  background:#dcfce7;
+  padding:8px 12px;
+  border-radius:14px;
+}
+
+.jaya-bot{
+  align-self:flex-start;
+  background:#f3f4f6;
+  padding:8px 12px;
+  border-radius:14px;
+}
+
+.jaya-typing{
+  font-size:12px;
+  color:#555;
+}
+
+/* result panel */
+.jaya-results{
+  max-height:160px;
+  overflow:auto;
+  border-top:1px solid #eee;
+  padding:8px;
+  display:none;
+  background:#fafafa;
+}
+
+/* result row */
+.jaya-item{
+  display:flex;
+  gap:8px;
+  margin-bottom:8px;
+  background:#fff;
+  border-radius:10px;
+  padding:6px;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);
+  align-items:center;
+}
+
+.jaya-item img{
+  width:46px;
+  height:46px;
+  border-radius:8px;
+  object-fit:cover;
+}
+
+.jaya-item-title{
+  font-size:12px;
+  font-weight:600;
+}
+
+.jaya-item-price{
+  font-size:12px;
+  color:#0f766e;
+}
+
+.jaya-item button{
+  margin-left:auto;
+  border:none;
+  background:#020617;
+  color:#fff;
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* input area */
+.jaya-input-wrap{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  border-top:1px solid #eee;
+}
+
+.jaya-input{
+  flex:1;
+  padding:9px 12px;
+  border-radius:20px;
+  border:1px solid #ccc;
+  outline:none;
+  font-size:14px;
+}
+
+.jaya-send{
+  padding:9px 14px;
+  border-radius:20px;
+  border:none;
+  background:#0f766e;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* -------------------------
+   📱 MOBILE RESPONSIVE
+--------------------------*/
+
+@media (max-width:768px){
 
   .jaya-chat{
-    position:fixed;
-    bottom:140px;
-    right:32px;
-    width:360px;
-    height:500px;
-    background:#fff;
-    border-radius:18px;
-    box-shadow:0 25px 60px rgba(0,0,0,.25);
-    display:none;
-    flex-direction:column;
-    overflow:hidden;
-  }
-
-  .jaya-header{
-    padding:14px 16px;
-    background:linear-gradient(135deg,#0f766e,#020617);
-    color:#fff;
-  }
-
-  .jaya-header small{
-    display:block;
-    font-size:11px;
-    opacity:.8;
-  }
-
-  .jaya-messages{
-    flex:1;
-    padding:12px;
-    overflow:auto;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    font-size:14px;
-  }
-
-  .jaya-user{
-    align-self:flex-end;
-    background:#dcfce7;
-    padding:8px 12px;
-    border-radius:14px;
-  }
-
-  .jaya-bot{
-    align-self:flex-start;
-    background:#f3f4f6;
-    padding:8px 12px;
-    border-radius:14px;
-  }
-
-  .jaya-typing{
-    font-size:12px;
-    color:#555;
-  }
-
-  .jaya-results{
-    max-height:160px;
-    overflow:auto;
-    border-top:1px solid #eee;
-    padding:8px;
-    display:none;
-    background:#fafafa;
-  }
-
-  .jaya-item{
-    display:flex;
-    gap:8px;
-    margin-bottom:8px;
-    background:#fff;
-    border-radius:10px;
-    padding:6px;
-    box-shadow:0 2px 6px rgba(0,0,0,.05);
-    align-items:center;
-  }
-
-  .jaya-item img{
-    width:46px;height:46px;border-radius:8px;object-fit:cover;
-  }
-
-  .jaya-item-title{
-    font-size:12px;font-weight:600;
-  }
-
-  .jaya-item-price{
-    font-size:12px;color:#0f766e;
-  }
-
-  .jaya-item button{
-    margin-left:auto;
-    border:none;
-    background:#020617;
-    color:#fff;
-    font-size:11px;
-    padding:4px 8px;
-    border-radius:8px;
-    cursor:pointer;
-  }
-
-  .jaya-input-wrap{
-    display:flex;
-    gap:8px;
-    padding:10px;
-    border-top:1px solid #eee;
-  }
-
-  .jaya-input{
-    flex:1;
-    padding:9px 12px;
-    border-radius:20px;
-    border:1px solid #ccc;
-    outline:none;
-  }
-
-  .jaya-send{
-    padding:9px 14px;
-    border-radius:20px;
-    border:none;
-    background:#0f766e;
-    color:#fff;
-    cursor:pointer;
-    
-  }
-
-/* =======================
-   📱 Mobile Responsive
-   ======================= */
-
-@media (max-width: 768px){
-
-  .jaya-chat{
-    right: 12px !important;
-    left: 12px !important;
-    width: auto !important;
-
-    bottom: 92px !important;
-    height: 65vh !important;
-    max-height: 520px !important;
-    border-radius: 16px !important;
+    left:12px;
+    right:12px;
+    width:auto;
+    bottom:100px;
+    height:65vh;
+    max-height:520px;
+    border-radius:16px;
   }
 
   .jaya-wrap{
-    right: 14px !important;
-    bottom: 14px !important;
+    right:14px;
+    bottom:14px;
   }
 
   .jaya-bubble{
-    width: 56px !important;
-    height: 56px !important;
+    width:56px;
+    height:56px;
   }
 
   .jaya-bubble img{
-    width: 38px !important;
-    height: 38px !important;
+    width:38px;
+    height:38px;
   }
 
   .jaya-label{
-    font-size: 10px !important;
+    font-size:10px;
   }
 
   .jaya-results{
-    max-height: 120px !important;
+    max-height:120px;
   }
 
   .jaya-header{
-    padding: 12px 12px !important;
-    font-size: 14px !important;
+    font-size:14px;
   }
 
   .jaya-messages{
-    padding: 10px !important;
-    font-size: 13px !important;
-  }
-
-  .jaya-input-wrap{
-    padding: 8px !important;
-  }
-
-  .jaya-input{
-    font-size: 14px !important;
+    font-size:13px;
   }
 
   .jaya-send{
-    font-size: 13px !important;
-    padding: 8px 12px !important;
+    padding:8px 12px;
+    font-size:13px;
   }
 }
 
-
-/* =======================
-   📱 Very small phones
-   ======================= */
-
-@media (max-width: 420px){
+@media (max-width:420px){
 
   .jaya-chat{
-    height: 70vh !important;
-    bottom: 84px !important;
+    height:70vh;
+    bottom:90px;
   }
 
   .jaya-results{
-    max-height: 100px !important;
+    max-height:100px;
   }
 }
 `;
+
   document.head.appendChild(style);
 
   fetch(`${VERIFY_URL}?site=${encodeURIComponent(siteId)}&domain=${encodeURIComponent(domain)}`)
