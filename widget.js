@@ -21,8 +21,8 @@
   style.textContent = `
 .jaya-wrap{
   position:fixed;
-  right:20px;
-  bottom:20px;
+  right:16px;
+  bottom:16px;
   z-index:2147483647;
   font-family:system-ui,-apple-system,BlinkMacSystemFont;
   text-align:center;
@@ -37,7 +37,7 @@
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
   user-select:none;
   touch-action:manipulation;
 }
@@ -49,17 +49,17 @@
 }
 
 .jaya-label{
-  margin-top:4px;
   font-size:10px;
   font-weight:600;
+  margin-top:4px;
   color:#020617;
   pointer-events:none;
 }
 
 .jaya-chat{
   position:fixed;
-  right:20px;
-  bottom:92px;
+  right:16px;
+  bottom:88px;
 
   width:300px;
   height:400px;
@@ -67,6 +67,7 @@
   background:#fff;
   border-radius:14px;
   box-shadow:0 18px 40px rgba(0,0,0,.25);
+
   display:none;
   flex-direction:column;
   overflow:hidden;
@@ -86,8 +87,8 @@
 .jaya-header small{
   display:block;
   font-size:10px;
-  font-weight:400;
   opacity:.8;
+  font-weight:400;
 }
 
 .jaya-messages{
@@ -116,7 +117,7 @@
 
 .jaya-typing{
   font-size:11px;
-  color:#555;
+  color:#666;
 }
 
 .jaya-results{
@@ -140,8 +141,8 @@
 }
 
 .jaya-item img{
-  width:38px;
-  height:38px;
+  width:36px;
+  height:36px;
   border-radius:6px;
   object-fit:cover;
 }
@@ -188,15 +189,15 @@
   cursor:pointer;
 }
 
-/* ---------- responsive ---------- */
+/* mobile */
 
-@media(max-width:768px){
+@media (max-width:768px){
   .jaya-chat{
     left:10px;
     right:10px;
     width:auto;
     height:60vh;
-    bottom:80px;
+    bottom:76px;
   }
 
   .jaya-wrap{
@@ -205,7 +206,7 @@
   }
 }
 
-@media(max-width:420px){
+@media (max-width:420px){
   .jaya-chat{
     height:65vh;
   }
@@ -222,7 +223,7 @@
     .then(d => {
       if (d && d.status === "active") mount();
     })
-    .catch(() => { });
+    .catch(() => {});
 
   /* ---------------- UI ---------------- */
 
@@ -250,7 +251,7 @@
     chat.innerHTML = `
       <div class="jaya-header">
         Hi, I'm Jaya 👋
-        <small>Your smart site assistant</small>
+        <small>Your website assistant</small>
       </div>
 
       <div class="jaya-messages">
@@ -287,41 +288,34 @@
 
     async function sendMessage() {
 
-
-      // ----- small talk / human mode -----
-const smallTalk = /^(hi|hello|hey|hii|hlo|thanks|thank you)$/i;
-
-if (smallTalk.test(text)) {
-
-  msgs.innerHTML += `
-    <div class="jaya-bot">
-      Hi 👋 I’m Jaya.  
-      You can ask me about tools on this website or how things work.
-    </div>
-  `;
-
-  msgs.scrollTop = msgs.scrollHeight;
-  return;
-}
-
-
-// only number / size -> ask proper question
-if (/^\d+\s*(kb|mb)?$/i.test(text)) {
-
-  msgs.innerHTML += `
-    <div class="jaya-bot">
-      Please tell me what you want to do with ${text}.
-      For example: "compress image to ${text}"
-    </div>
-  `;
-
-  msgs.scrollTop = msgs.scrollHeight;
-  return;
-}
-
-
       const text = input.value.trim();
       if (!text) return;
+
+      /* -------- human small talk -------- */
+
+      if (/^(hi|hello|hey|hii|hlo|thanks|thank you)$/i.test(text)) {
+        msgs.innerHTML += `
+          <div class="jaya-user">${escapeHtml(text)}</div>
+          <div class="jaya-bot">
+            Hi 👋 I’m Jaya.  
+            You can ask me about tools on this site or general questions.
+          </div>`;
+        msgs.scrollTop = msgs.scrollHeight;
+        input.value="";
+        return;
+      }
+
+      if (/^\d+\s*(kb|mb)?$/i.test(text)) {
+        msgs.innerHTML += `
+          <div class="jaya-user">${escapeHtml(text)}</div>
+          <div class="jaya-bot">
+            Please tell me what you want to do.  
+            Example: compress image to ${escapeHtml(text)}
+          </div>`;
+        msgs.scrollTop = msgs.scrollHeight;
+        input.value="";
+        return;
+      }
 
       msgs.innerHTML += `<div class="jaya-user">${escapeHtml(text)}</div>`;
       msgs.scrollTop = msgs.scrollHeight;
@@ -361,25 +355,31 @@ if (/^\d+\s*(kb|mb)?$/i.test(text)) {
 
         if (result && result.mode === "find") {
 
-          const items = findTools(result.query);
+          const items = findTools(result.query || text);
+
           msgs.innerHTML +=
-            `<div class="jaya-bot">Found ${items.length} matching items.</div>`;
+            `<div class="jaya-bot">Found ${items.length} matching tools.</div>`;
+
           showResults(items);
 
         } else {
 
-          const toolQuery =
-            /(tool|convert|resize|compress|pdf|merge|split|image)/i.test(text);
+          const isToolQuery =
+            /(tool|convert|resize|compress|pdf|merge|split|image|watermark|metadata)/i.test(text);
 
-          if (toolQuery) {
+          if (isToolQuery) {
 
             const items = findTools(text);
 
             if (items.length) {
+
               msgs.innerHTML +=
                 `<div class="jaya-bot">Here are the relevant tools.</div>`;
+
               showResults(items);
+
             } else {
+
               msgs.innerHTML +=
                 `<div class="jaya-bot">${escapeHtml(result.answer)}</div>`;
             }
@@ -388,7 +388,6 @@ if (/^\d+\s*(kb|mb)?$/i.test(text)) {
 
             msgs.innerHTML +=
               `<div class="jaya-bot">${escapeHtml(result.answer)}</div>`;
-
           }
         }
 
@@ -400,7 +399,7 @@ if (/^\d+\s*(kb|mb)?$/i.test(text)) {
       }
     }
 
-    /* ---------------- TOOL FIND (LOCAL) ---------------- */
+    /* ---------------- local tool finder ---------------- */
 
     function findTools(query) {
 
@@ -428,14 +427,10 @@ if (/^\d+\s*(kb|mb)?$/i.test(text)) {
 
         const img = c.querySelector("img")?.src || null;
 
-        out.push({
-          el: c,
-          title,
-          image: img
-        });
+        out.push({ el: c, title, image: img });
       }
 
-      return out.slice(0, 10);
+      return out.slice(0, 8);
     }
 
     function showResults(items) {
@@ -513,7 +508,6 @@ if (/^\d+\s*(kb|mb)?$/i.test(text)) {
   }
 
   function escapeHtml(s) {
-
     return String(s || "").replace(/[&<>"']/g, m => ({
       "&": "&amp;",
       "<": "&lt;",
