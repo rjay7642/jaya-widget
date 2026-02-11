@@ -190,7 +190,7 @@
       bubble.className = "jaya-bubble";
 
       const img = document.createElement("img");
-      img.src = "jayabot.png";
+      img.src = "https://rjay7642.github.io/jaya-widget/jayabot.png";
 
       const label = document.createElement("div");
       label.className = "jaya-label";
