@@ -1,5 +1,4 @@
 (function () {
-  /* ================= CONFIG ================= */
 
   const script = document.currentScript;
   const siteId = script && script.getAttribute("data-site-id");
@@ -14,125 +13,218 @@
   const BOT_IMAGE =
     "https://rjay7642.github.io/jaya-widget/jayabot.png";
 
-  /* ================= STYLE ================= */
+  const domain = location.hostname;
+
+  /* ---------------- STYLE ---------------- */
 
   const style = document.createElement("style");
   style.textContent = `
 .jaya-wrap{
-  position:fixed;bottom:32px;right:32px;z-index:999999;
-  text-align:center;font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:2147483647;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  text-align:center;
 }
 
 .jaya-bubble{
-  width:64px;height:64px;border-radius:50%;
+  width:56px;
+  height:56px;
+  border-radius:50%;
   background:#020617;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;position:relative;overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  user-select:none;touch-action:manipulation;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  user-select:none;
+  touch-action:manipulation;
 }
 
-.jaya-bubble img{width:44px;height:44px;pointer-events:none}
+.jaya-bubble img{
+  width:34px;
+  height:34px;
+  pointer-events:none;
+}
 
 .jaya-label{
-  font-size:11px;margin-top:4px;color:#0f172a;font-weight:600;
+  margin-top:4px;
+  font-size:10px;
+  font-weight:600;
+  color:#020617;
   pointer-events:none;
 }
-
-.jaya-wave{
-  position:absolute;border-radius:50%;
-  transform:scale(0);
-  background:rgba(34,197,94,.35);
-  animation:jaya-ripple .7s linear;
-  pointer-events:none;
-}
-@keyframes jaya-ripple{to{transform:scale(3);opacity:0}}
 
 .jaya-chat{
-  position:fixed;bottom:140px;right:32px;
-  width:360px;height:500px;background:#fff;border-radius:18px;
-  box-shadow:0 25px 60px rgba(0,0,0,.25);
-  display:none;flex-direction:column;overflow:hidden;
-  z-index:999999;
+  position:fixed;
+  right:20px;
+  bottom:92px;
+
+  width:300px;
+  height:400px;
+
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 18px 40px rgba(0,0,0,.25);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+
+  z-index:2147483647;
+  transform:none !important;
 }
 
 .jaya-header{
-  padding:8px 12px;
+  padding:6px 10px;
   background:linear-gradient(135deg,#0f766e,#020617);
-  color:#fff;font-size:13px;font-weight:600;line-height:1.2;
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
 }
-.jaya-header small{display:block;font-size:10px;opacity:.8;font-weight:400}
+
+.jaya-header small{
+  display:block;
+  font-size:10px;
+  font-weight:400;
+  opacity:.8;
+}
 
 .jaya-messages{
-  flex:1;padding:12px;overflow:auto;
-  display:flex;flex-direction:column;gap:8px;font-size:14px;
+  flex:1;
+  padding:10px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:13px;
 }
 
-.jaya-user{align-self:flex-end;background:#dcfce7;padding:8px 12px;border-radius:14px}
-.jaya-bot{align-self:flex-start;background:#f3f4f6;padding:8px 12px;border-radius:14px}
-.jaya-typing{font-size:12px;color:#555}
+.jaya-user{
+  align-self:flex-end;
+  background:#dcfce7;
+  padding:7px 10px;
+  border-radius:12px;
+}
+
+.jaya-bot{
+  align-self:flex-start;
+  background:#f3f4f6;
+  padding:7px 10px;
+  border-radius:12px;
+}
+
+.jaya-typing{
+  font-size:11px;
+  color:#555;
+}
 
 .jaya-results{
-  max-height:160px;overflow:auto;border-top:1px solid #eee;
-  padding:8px;display:none;background:#fafafa;
+  display:none;
+  max-height:120px;
+  overflow:auto;
+  border-top:1px solid #eee;
+  padding:6px;
+  background:#fafafa;
 }
 
 .jaya-item{
-  display:flex;gap:8px;margin-bottom:8px;background:#fff;
-  border-radius:10px;padding:6px;box-shadow:0 2px 6px rgba(0,0,0,.05);
+  display:flex;
+  gap:6px;
+  padding:6px;
+  border-radius:8px;
+  background:#fff;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);
+  margin-bottom:6px;
   align-items:center;
 }
-.jaya-item img{width:46px;height:46px;border-radius:8px;object-fit:cover}
-.jaya-item-title{font-size:12px;font-weight:600}
-.jaya-item-price{font-size:12px;color:#0f766e}
+
+.jaya-item img{
+  width:38px;
+  height:38px;
+  border-radius:6px;
+  object-fit:cover;
+}
+
+.jaya-item-title{
+  font-size:11px;
+  font-weight:600;
+}
+
 .jaya-item button{
-  margin-left:auto;border:none;background:#020617;color:#fff;
-  font-size:11px;padding:4px 8px;border-radius:8px;cursor:pointer
+  margin-left:auto;
+  border:none;
+  background:#020617;
+  color:#fff;
+  font-size:10px;
+  padding:4px 8px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-.jaya-input-wrap{display:flex;gap:8px;padding:10px;border-top:1px solid #eee}
+.jaya-input-wrap{
+  display:flex;
+  gap:6px;
+  padding:8px;
+  border-top:1px solid #eee;
+}
+
 .jaya-input{
-  flex:1;padding:9px 12px;border-radius:20px;border:1px solid #ccc;
-  outline:none;font-size:14px
-}
-.jaya-send{
-  padding:9px 14px;border-radius:20px;border:none;
-  background:#0f766e;color:#fff;cursor:pointer
+  flex:1;
+  border:1px solid #ccc;
+  border-radius:14px;
+  padding:6px 10px;
+  font-size:13px;
+  outline:none;
 }
 
-/* mobile */
-@media (max-width:768px){
-  .jaya-chat{
-    left:12px;right:12px;width:auto;
-    bottom:100px;height:65vh;max-height:520px;border-radius:16px;
-  }
-  .jaya-wrap{right:14px;bottom:14px}
-  .jaya-bubble{width:56px;height:56px}
-  .jaya-bubble img{width:38px;height:38px}
-  .jaya-label{font-size:10px}
-  .jaya-results{max-height:120px}
-  .jaya-messages{font-size:13px}
+.jaya-send{
+  border:none;
+  border-radius:14px;
+  padding:6px 10px;
+  font-size:12px;
+  background:#0f766e;
+  color:#fff;
+  cursor:pointer;
 }
-@media (max-width:420px){
-  .jaya-chat{height:70vh;bottom:90px}
-  .jaya-results{max-height:100px}
+
+/* ---------- responsive ---------- */
+
+@media(max-width:768px){
+  .jaya-chat{
+    left:10px;
+    right:10px;
+    width:auto;
+    height:60vh;
+    bottom:80px;
+  }
+
+  .jaya-wrap{
+    right:12px;
+    bottom:12px;
+  }
+}
+
+@media(max-width:420px){
+  .jaya-chat{
+    height:65vh;
+  }
 }
 `;
   document.head.appendChild(style);
 
-  /* ================= VERIFY ================= */
+  /* ---------------- VERIFY ---------------- */
 
-  const domain = location.hostname;
-
-  fetch(`${VERIFY_URL}?site=${encodeURIComponent(siteId)}&domain=${encodeURIComponent(domain)}`)
+  fetch(
+    `${VERIFY_URL}?site=${encodeURIComponent(siteId)}&domain=${encodeURIComponent(domain)}`
+  )
     .then(r => r.json())
-    .then(data => {
-      if (!data || data.status !== "active") return;
-      mount();
+    .then(d => {
+      if (d && d.status === "active") mount();
     })
-    .catch(() => {});
+    .catch(() => { });
 
-  /* ================= UI ================= */
+  /* ---------------- UI ---------------- */
 
   function mount() {
 
@@ -158,14 +250,19 @@
     chat.innerHTML = `
       <div class="jaya-header">
         Hi, I'm Jaya 👋
-        <small>Your website assistant</small>
+        <small>Your smart site assistant</small>
       </div>
+
       <div class="jaya-messages">
-        <div class="jaya-bot">Ask me about tools, services or content on this site.</div>
+        <div class="jaya-bot">
+          Ask me about this website or general questions.
+        </div>
       </div>
+
       <div class="jaya-results"></div>
+
       <div class="jaya-input-wrap">
-        <input class="jaya-input" placeholder="Ask me about this website…" />
+        <input class="jaya-input" placeholder="Ask something…" />
         <button class="jaya-send">Send</button>
       </div>
     `;
@@ -173,34 +270,23 @@
     document.body.appendChild(wrap);
     document.body.appendChild(chat);
 
-    bubble.addEventListener("click", function (e) {
-      chat.style.display = chat.style.display === "flex" ? "none" : "flex";
-      ripple(e, bubble);
+    bubble.addEventListener("click", () => {
+      chat.style.display =
+        chat.style.display === "flex" ? "none" : "flex";
     });
 
     const input = chat.querySelector(".jaya-input");
-    const sendBtn = chat.querySelector(".jaya-send");
+    const send = chat.querySelector(".jaya-send");
     const msgs = chat.querySelector(".jaya-messages");
     const resultsBox = chat.querySelector(".jaya-results");
 
-    const hints = [
-      "Find tools like convert, resize, compress…",
-      "Ask about features on this site…",
-      "Search tools using natural language…",
-      "Explore content on this page…"
-    ];
-    let hi = 0;
-    setInterval(() => {
-      hi = (hi + 1) % hints.length;
-      input.placeholder = hints[hi];
-    }, 4500);
-
-    sendBtn.addEventListener("click", sendMessage);
+    send.addEventListener("click", sendMessage);
     input.addEventListener("keydown", e => {
       if (e.key === "Enter") sendMessage();
     });
 
     async function sendMessage() {
+
       const text = input.value.trim();
       if (!text) return;
 
@@ -217,129 +303,111 @@
       resultsBox.innerHTML = "";
 
       try {
-        const r = await fetch(CHAT_URL, {
+
+        const res = await fetch(CHAT_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: text,
             site_id: siteId,
+            message: text,
             page_text: collectPageText()
           })
         });
 
-        const data = await r.json();
+        const data = await res.json();
         typing.remove();
 
         if (!data || !data.ok) {
-          msgs.innerHTML += `<div class="jaya-bot">Inactive</div>`;
+          msgs.innerHTML += `<div class="jaya-bot">Service unavailable.</div>`;
           return;
         }
 
         const result = data.result;
 
-        /* ---------- TOOL FIRST UX ---------- */
+        /* ---------- tool first ---------- */
 
         if (result && result.mode === "find") {
 
-          const items = advancedFind(result);
-
+          const items = findTools(result.query);
           msgs.innerHTML +=
-            `<div class="jaya-bot">Found ${items.length} tools on this page.</div>`;
-
+            `<div class="jaya-bot">Found ${items.length} matching items.</div>`;
           showResults(items);
 
         } else {
 
-          // local fallback (convert / resize / pdf to image etc.)
-          const localItems = advancedFind({
-            query: text,
-            maxPrice: null,
-            sort: null
-          });
+          const toolQuery =
+            /(tool|convert|resize|compress|pdf|merge|split|image)/i.test(text);
 
-          if (localItems.length > 0) {
+          if (toolQuery) {
 
-            msgs.innerHTML +=
-              `<div class="jaya-bot">Here are the matching tools on this site.</div>`;
+            const items = findTools(text);
 
-            showResults(localItems);
+            if (items.length) {
+              msgs.innerHTML +=
+                `<div class="jaya-bot">Here are the relevant tools.</div>`;
+              showResults(items);
+            } else {
+              msgs.innerHTML +=
+                `<div class="jaya-bot">${escapeHtml(result.answer)}</div>`;
+            }
 
           } else {
 
             msgs.innerHTML +=
-              `<div class="jaya-bot">${escapeHtml(result.answer || "Not found on this website.")}</div>`;
+              `<div class="jaya-bot">${escapeHtml(result.answer)}</div>`;
+
           }
         }
 
         msgs.scrollTop = msgs.scrollHeight;
 
-      } catch (e) {
+      } catch {
         typing.remove();
-        msgs.innerHTML += `<div class="jaya-bot">Network error</div>`;
+        msgs.innerHTML += `<div class="jaya-bot">Network error.</div>`;
       }
     }
 
-    /* ================= FIND ENGINE ================= */
+    /* ---------------- TOOL FIND (LOCAL) ---------------- */
 
-    function advancedFind(cmd) {
+    function findTools(query) {
 
-      const priceRegex = /₹\s?\d+|\$\s?\d+/;
-      const nodes = Array.from(document.querySelectorAll("body *"))
-        .filter(el => priceRegex.test(el.textContent || "") || looksLikeToolCard(el));
+      const cards = Array.from(
+        document.querySelectorAll("section,article,li,div")
+      );
 
-      const seen = new Set();
       const out = [];
+      const seen = new Set();
 
-      for (const n of nodes) {
+      for (const c of cards) {
 
-        let card =
-          n.closest("article,li,section") ||
-          n.closest("div");
+        if (seen.has(c)) continue;
 
-        if (!card || seen.has(card)) continue;
-        seen.add(card);
-
-        const text = (card.innerText || "").trim();
+        const text = (c.innerText || "").trim();
         if (!text) continue;
 
-        let price = null;
-        const pm = text.match(priceRegex);
-        if (pm) price = Number(pm[0].replace(/[^\d]/g, ""));
+        if (!smartMatch(query, text)) continue;
 
-        let title =
-          card.querySelector("h1,h2,h3,h4")?.innerText ||
-          card.querySelector("strong")?.innerText ||
-          card.querySelector("img")?.alt ||
-          text.split("\n")[0] ||
-          "";
+        seen.add(c);
 
-        title = title.trim();
+        const title =
+          c.querySelector("h1,h2,h3,h4,strong")?.innerText ||
+          text.split("\n")[0];
 
-        if (cmd.query) {
-          if (!smartMatch(cmd.query, title + " " + text)) continue;
-        }
+        const img = c.querySelector("img")?.src || null;
 
-        if (cmd.maxPrice && price && price > cmd.maxPrice) continue;
-
-        const image = card.querySelector("img")?.src || null;
-        const link = card.querySelector("a")?.href || null;
-
-        card.style.outline = "3px solid #00ff99";
-        card.style.outlineOffset = "3px";
-
-        out.push({ title, price, image, link, el: card });
+        out.push({
+          el: c,
+          title,
+          image: img
+        });
       }
 
-      if (cmd.sort === "price_low_to_high") {
-        out.sort((a, b) => (a.price || 0) - (b.price || 0));
-      }
-
-      return out;
+      return out.slice(0, 10);
     }
 
     function showResults(items) {
 
-      if (!items || !items.length) return;
+      if (!items.length) return;
 
       resultsBox.style.display = "block";
       resultsBox.innerHTML = "";
@@ -350,82 +418,75 @@
         row.className = "jaya-item";
 
         const im = document.createElement("img");
-        im.src = it.image || "https://via.placeholder.com/46";
+        im.src = it.image || "https://via.placeholder.com/40";
 
         const info = document.createElement("div");
-        info.innerHTML = `
-          <div class="jaya-item-title">${escapeHtml(it.title || "Item")}</div>
-          ${it.price ? `<div class="jaya-item-price">₹${it.price}</div>` : ""}
-        `;
+        info.innerHTML =
+          `<div class="jaya-item-title">${escapeHtml(it.title)}</div>`;
 
         const btn = document.createElement("button");
-        btn.textContent = "View";
-        btn.addEventListener("click", function () {
+        btn.textContent = "Go";
+
+        btn.onclick = () => {
           it.el.scrollIntoView({ behavior: "smooth", block: "center" });
-          it.el.style.outline = "4px solid #22c55e";
-          if (it.link) window.open(it.link, "_blank");
-        });
+          it.el.style.boxShadow = "0 0 0 3px #22c55e";
+          setTimeout(() => it.el.style.boxShadow = "", 1200);
+        };
 
         row.appendChild(im);
         row.appendChild(info);
         row.appendChild(btn);
-
         resultsBox.appendChild(row);
       });
     }
+
   }
 
-  /* ================= HELPERS ================= */
-
-  function ripple(e, bubble) {
-    const d = document.createElement("span");
-    d.className = "jaya-wave";
-    const r = bubble.getBoundingClientRect();
-    const size = Math.max(r.width, r.height);
-    d.style.width = d.style.height = size + "px";
-    d.style.left = (e.clientX - r.left - size / 2) + "px";
-    d.style.top = (e.clientY - r.top - size / 2) + "px";
-    bubble.appendChild(d);
-    setTimeout(() => d.remove(), 700);
-  }
+  /* ---------------- helpers ---------------- */
 
   function collectPageText() {
+
     const blocks = [];
-    const selectors = ["main", "article", "section", "p", "li", "h1", "h2", "h3"];
-    selectors.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => {
+    const sel = ["main", "article", "section", "p", "li", "h1", "h2", "h3"];
+
+    sel.forEach(s => {
+      document.querySelectorAll(s).forEach(el => {
         const t = (el.innerText || "").replace(/\s+/g, " ").trim();
-        if (t && t.length > 40) blocks.push(t);
+        if (t.length > 40) blocks.push(t);
       });
     });
+
     return blocks.join("\n").slice(0, 12000);
   }
 
-  function smartMatch(query, text) {
-    const qw = normalizeWords(query);
-    const tw = normalizeWords(text);
-    return qw.some(q =>
-      tw.some(t => t === q || t.startsWith(q) || q.startsWith(t))
+  function smartMatch(q, text) {
+
+    const qw = normalize(q);
+    const tw = normalize(text);
+
+    return qw.some(a =>
+      tw.some(b => b === a || b.startsWith(a) || a.startsWith(b))
     );
   }
 
-  function normalizeWords(str) {
-    return (str || "")
+  function normalize(s) {
+
+    return (s || "")
       .toLowerCase()
       .replace(/[^a-z0-9\s]/g, " ")
       .split(/\s+/)
       .filter(w => w.length > 2)
-      .map(w => (w.endsWith("s") ? w.slice(0, -1) : w));
-  }
-
-  function looksLikeToolCard(el) {
-    const t = (el.textContent || "").toLowerCase();
-    return /(compress|resize|convert|pdf|image|tool|merge|split|watermark|metadata)/.test(t);
+      .map(w => w.endsWith("s") ? w.slice(0, -1) : w);
   }
 
   function escapeHtml(s) {
+
     return String(s || "").replace(/[&<>"']/g, m => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
     })[m]);
   }
 
