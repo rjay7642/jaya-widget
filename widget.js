@@ -16,10 +16,11 @@
 
   const style = document.createElement("style");
   style.textContent = `
-  .jaya-wrap{
-    position:fixed;bottom:22px;right:22px;z-index:999999;
-    text-align:center;font-family:system-ui;
-  }
+ .jaya-wrap{
+    position:fixed;
+    bottom:32px;
+    right:32px;
+
 
   .jaya-bubble{
     width:64px;height:64px;border-radius:50%;
@@ -55,8 +56,8 @@
 
   .jaya-chat{
     position:fixed;
-    bottom:110px;
-    right:22px;
+    bottom:140px;
+    right:32px;
     width:360px;
     height:500px;
     background:#fff;
@@ -173,8 +174,90 @@
     background:#0f766e;
     color:#fff;
     cursor:pointer;
+    
   }
-  `;
+
+/* =======================
+   📱 Mobile Responsive
+   ======================= */
+
+@media (max-width: 768px){
+
+  .jaya-chat{
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+
+    bottom: 92px !important;
+    height: 65vh !important;
+    max-height: 520px !important;
+    border-radius: 16px !important;
+  }
+
+  .jaya-wrap{
+    right: 14px !important;
+    bottom: 14px !important;
+  }
+
+  .jaya-bubble{
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .jaya-bubble img{
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .jaya-label{
+    font-size: 10px !important;
+  }
+
+  .jaya-results{
+    max-height: 120px !important;
+  }
+
+  .jaya-header{
+    padding: 12px 12px !important;
+    font-size: 14px !important;
+  }
+
+  .jaya-messages{
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .jaya-input-wrap{
+    padding: 8px !important;
+  }
+
+  .jaya-input{
+    font-size: 14px !important;
+  }
+
+  .jaya-send{
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+  }
+}
+
+
+/* =======================
+   📱 Very small phones
+   ======================= */
+
+@media (max-width: 420px){
+
+  .jaya-chat{
+    height: 70vh !important;
+    bottom: 84px !important;
+  }
+
+  .jaya-results{
+    max-height: 100px !important;
+  }
+}
+`;
   document.head.appendChild(style);
 
   fetch(`${VERIFY_URL}?site=${encodeURIComponent(siteId)}&domain=${encodeURIComponent(domain)}`)
